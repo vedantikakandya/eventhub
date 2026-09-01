@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "431865200050",
+    "firebase_url": "https://eventhub-cb4fa-default-rtdb.firebaseio.com",
+    "project_id": "eventhub-cb4fa",
+    "storage_bucket": "eventhub-cb4fa.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:431865200050:android:0e4acc9cf501728fbe38ab",
+        "android_client_info": {
+          "package_name": "com.example.eventhub"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8tHnq4ZV35wmCfyKG1Rff0GZUX-iHzmg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
