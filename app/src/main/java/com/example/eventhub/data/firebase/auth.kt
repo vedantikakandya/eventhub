@@ -12,7 +12,7 @@ class authfirebase() {
     fun siginupfrebase(
         user: User,
         password: String,
-        onResult: (Boolean) -> Unit
+        onResult: (Boolean, String?) -> Unit
     ) {
         auth.createUserWithEmailAndPassword(user.email, password)
             .addOnSuccessListener { result ->
@@ -20,33 +20,33 @@ class authfirebase() {
                 uid?.let {
                     firestore.collection("users").document(it).set(user)
                         .addOnSuccessListener {
-                            onResult(true)
+                            onResult(true, null)
                             Log.d("Signup", "User saved in Firestore")
 
                         }
-                        .addOnFailureListener {
-                            onResult(false)
-                            Log.e("Signup", "Firestore error: ${it.message}")
+                        .addOnFailureListener { e ->
+                            onResult(false, e.message ?: "Firestore error occurred")
+                            Log.e("Signup", "Firestore error: ${e.message}")
 
                         }
                 }
 
             }
-            .addOnFailureListener {
-                onResult(false)
+            .addOnFailureListener { e ->
+                onResult(false, e.message ?: "Signup failed")
             }
     }
     fun loginfirebase(
         email: String,
         password: String,
-        onResult: (Boolean) -> Unit
+        onResult: (Boolean, String?) -> Unit
     ) {
         auth.signInWithEmailAndPassword(email, password)
             .addOnSuccessListener {
-                onResult(true)
+                onResult(true, null)
             }
-            .addOnFailureListener {
-                onResult(false)
+            .addOnFailureListener { e ->
+                onResult(false, e.message ?: "Login failed")
             }
     }
 

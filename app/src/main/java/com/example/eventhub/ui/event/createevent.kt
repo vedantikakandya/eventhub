@@ -298,6 +298,9 @@ fun CreateEventScreen(
                             status = status,
                             onSuccess = {
                                 Toast.makeText(context, "Event Created", Toast.LENGTH_SHORT).show()
+                            },
+                            onFailure = { error ->
+                                Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
                             }
                         )
 

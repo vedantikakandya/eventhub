@@ -45,7 +45,7 @@ fun eventdetails(
     messageViewModel: MessageViewModel = viewModel(),
     onChatClick: (String) -> Unit = {},
 
-            onregisterclick: () -> Unit = {}
+    onregisterclick: () -> Unit = {}
 ) {
     val context = LocalContext.current
     var isRegistered by remember {
@@ -156,14 +156,13 @@ fun eventdetails(
                         eventId = displayEvent.eventId,
                         eventTitle = displayEvent.eventname,
                         onSuccess = {
-                            onregisterclick()
                             eventViewModel.fetchEventById(eventId)
-                            isRegistered = true
-                            Toast.makeText(
-                                context,
-                                "Registered Successfully",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            isRegistered=true
+                            Toast.makeText(context, "Registered Successfully", Toast.LENGTH_SHORT).show()
+                        },
+                        onFailure = {error ->
+                            Toast.makeText(context,error, Toast.LENGTH_SHORT).show()
+
                         }
                     )
                 },

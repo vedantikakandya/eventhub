@@ -234,15 +234,19 @@ fun BecomeVendorScreen(
 
                 vendorViewModel.createVendor(
                     vendor = vendor,
+
                     onSuccess = {
 
                         Toast.makeText(
                             context,
-                            "Vendor Created",
+                            "Vendor Created Successfully",
                             Toast.LENGTH_SHORT
                         ).show()
 
                         onVendorCreated()
+                    },
+                    onFailure={error ->
+                        Toast.makeText(context,error, Toast.LENGTH_SHORT).show()
                     }
                 )
             },

@@ -14,20 +14,29 @@ class authviewmodel: ViewModel(){
     val _loginsuccess= MutableStateFlow(false)
     val loginstate: StateFlow<Boolean> = _loginsuccess
 
-    val _signupsuccess=MutableStateFlow(false)
+    private val _signupsuccess=MutableStateFlow(false)
     val signupstate: StateFlow<Boolean> = _signupsuccess
 
+    private val _errorMessage = MutableStateFlow<String?>(null)
+    val errorMessage: StateFlow<String?> = _errorMessage
+
     fun login(email:String, password:String){
-        repository.loginfirebase(email, password){success->
-            _loginsuccess.value = true
+        repository.loginfirebase(email, password){ success, error ->
+            _loginsuccess.value = success
+            _errorMessage.value = error
         }
     }
 
 
     fun signup(user: User, password: String) {
-        repository.siginupfrebase(user, password) {success->
-            _signupsuccess.value = true
+        repository.siginupfrebase(user, password) { success, error ->
+            _signupsuccess.value = success
+            _errorMessage.value = error
         }
+    }
+
+    fun clearError() {
+        _errorMessage.value = null
     }
     fun resetLoginState() {
         _loginsuccess.value = false

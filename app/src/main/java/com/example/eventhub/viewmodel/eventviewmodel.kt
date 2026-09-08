@@ -203,11 +203,19 @@ class eventviewmodel: ViewModel(){
         category: String,
         capacity: Int,
         status: String,
-        onSuccess: () -> Unit
+        onSuccess: () -> Unit,
+        onFailure: (String) -> Unit
     ) {
 
         val authUser =
-            FirebaseAuth.getInstance().currentUser ?: return
+            FirebaseAuth.getInstance().currentUser
+
+        if (authUser == null) {
+
+            onFailure("User is not logged in")
+            return
+        }
+
         val docRef = firestore.collection("events").document()
         firestore.collection("users")
             .document(authUser.uid)
@@ -239,15 +247,31 @@ class eventviewmodel: ViewModel(){
                     }
                     .addOnFailureListener {
                         Log.e("EVENT", "Create Failed", it)
+
+                        onFailure(
+                            it.message
+                                ?: "Failed to create event"
+                        )
                     }
+            }
+            .addOnFailureListener {
+                Log.e("USER", "Fetch Failed", it)
             }
     }
     fun registerForEvent(
         eventId: String,
         eventTitle: String,
         onSuccess: () -> Unit,
+        onFailure: (String) -> Unit
     ){
-        val authUser = FirebaseAuth.getInstance().currentUser ?: return
+        val authUser =
+            FirebaseAuth.getInstance().currentUser
+
+        if (authUser == null) {
+
+            onFailure("User is not logged in")
+            return
+        }
 
         firestore.collection("users")
             .document(authUser.uid)
@@ -274,13 +298,26 @@ class eventviewmodel: ViewModel(){
                             .update(
                                 "registeredcount",
                                 com.google.firebase.firestore.FieldValue.increment(1)
-                            )
+                            ).addOnSuccessListener {
+                                onSuccess()
 
-                        onSuccess()
+                            }
+                            .addOnFailureListener {
+                                onFailure(
+                                    it.message?:"Failed to update register count"
+                                )
+                                Log.e("REGISTER", "Failed", it)
+                            }
+
                     }
                     .addOnFailureListener {
-                        Log.e("REGISTER", "Failed", it)
+                        onFailure(it.message ?: "Failed to register")
                     }
+            }
+            .addOnFailureListener {
+                onFailure(
+                    it.message?:"failed to get user information"
+                )
             }
 
     }

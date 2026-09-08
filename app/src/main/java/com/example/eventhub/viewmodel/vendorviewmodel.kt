@@ -31,7 +31,7 @@ class vendorviewmodel : ViewModel() {
                 .currentUser?.uid
                 ?: return
 
-        firestore.collection("vendors")
+        firestore.collection("vendor")
             .whereEqualTo(
                 "userid",
                 uid
@@ -53,7 +53,8 @@ class vendorviewmodel : ViewModel() {
     }
     fun createVendor(
         vendor: vendor,
-        onSuccess: () -> Unit
+        onSuccess: () -> Unit,
+        onFailure: (String) -> Unit
     ) {
 
         firestore.collection("vendor")
@@ -71,8 +72,15 @@ class vendorviewmodel : ViewModel() {
                         "role",
                         "organiser"
                     )
-
-                onSuccess()
+                    .addOnSuccessListener {
+                        onSuccess()
+                    }
+                    .addOnFailureListener { e ->
+                        onFailure(e.message ?: "Failed to update user role")
+                    }
+            }
+            .addOnFailureListener { e ->
+                onFailure(e.message ?: "Failed to create vendor")
             }
     }
     fun fetchvendors() {

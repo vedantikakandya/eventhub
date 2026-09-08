@@ -1,6 +1,7 @@
 package com.example.eventhub.ui.auth
 
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -30,8 +32,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -48,11 +53,13 @@ fun login(onLoginClick: () -> Unit,
 ){
     val loginstate by viewmodel.loginstate.collectAsState()
     val signupstate by viewmodel.signupstate.collectAsState()
+    val errorMessage by viewmodel.errorMessage.collectAsState()
+    val context = LocalContext.current
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
-    LaunchedEffect(loginstate){
+    LaunchedEffect(loginstate, signupstate, errorMessage){
         if(loginstate){
             onLoginClick()
             viewmodel.resetLoginState()
@@ -61,7 +68,10 @@ fun login(onLoginClick: () -> Unit,
             onSignupClick()
             viewmodel.resetSignupState()
         }
-
+        errorMessage?.let {
+            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            viewmodel.clearError()
+        }
     }
 
     val scrollState = rememberScrollState()
@@ -104,6 +114,7 @@ fun login(onLoginClick: () -> Unit,
             label = { Text("Email") },
             singleLine = true,
             modifier = Modifier.fillMaxWidth(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = Purple,
                 unfocusedBorderColor = Purple,
@@ -121,6 +132,8 @@ fun login(onLoginClick: () -> Unit,
             label = { Text("Password")},
             singleLine = true,
             modifier = Modifier.fillMaxWidth(),
+            visualTransformation = PasswordVisualTransformation(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = Purple,
                 unfocusedBorderColor = Purple,
@@ -134,7 +147,11 @@ fun login(onLoginClick: () -> Unit,
 
         Button(
             onClick = {
-                viewmodel.login(email, password)
+                if (email.isNotBlank() && password.isNotBlank()) {
+                    viewmodel.login(email.trim(), password)
+                } else {
+                    Toast.makeText(context, "Please enter email and password", Toast.LENGTH_SHORT).show()
+                }
 
             },
             modifier = Modifier
@@ -166,7 +183,7 @@ fun login(onLoginClick: () -> Unit,
             )
             TextButton(
                 onClick = {
-                    viewmodel.signup(User(), password)
+                    onSignupClick()
                 }
             ) {
                 Text(

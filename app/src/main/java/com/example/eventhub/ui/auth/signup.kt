@@ -1,5 +1,6 @@
 package com.example.eventhub.ui.auth
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -29,8 +31,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -46,6 +51,8 @@ fun signup(onLoginClick: () -> Unit,
 ){
     val loginstate by viewmodel.loginstate.collectAsState()
     val signupstate by viewmodel.signupstate.collectAsState()
+    val errorMessage by viewmodel.errorMessage.collectAsState()
+    val context = LocalContext.current
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -54,7 +61,7 @@ fun signup(onLoginClick: () -> Unit,
 
 
 
-    LaunchedEffect(loginstate){
+    LaunchedEffect(loginstate, signupstate, errorMessage){
         if(loginstate){
             onLoginClick()
             viewmodel.resetLoginState()
@@ -62,6 +69,10 @@ fun signup(onLoginClick: () -> Unit,
         if(signupstate){
             onSignupClick()
             viewmodel.resetSignupState()
+        }
+        errorMessage?.let {
+            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            viewmodel.clearError()
         }
     }
 
@@ -105,6 +116,7 @@ fun signup(onLoginClick: () -> Unit,
             label = { Text("Username") },
             singleLine = true,
             modifier = Modifier.fillMaxWidth(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = Purple,
                 unfocusedBorderColor = Purple,
@@ -122,6 +134,8 @@ fun signup(onLoginClick: () -> Unit,
             label = { Text("Create Password")},
             singleLine = true,
             modifier = Modifier.fillMaxWidth(),
+            visualTransformation = PasswordVisualTransformation(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = Purple,
                 unfocusedBorderColor = Purple,
@@ -138,6 +152,7 @@ fun signup(onLoginClick: () -> Unit,
             label = { Text("Email") },
             singleLine = true,
             modifier = Modifier.fillMaxWidth(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = Purple,
                 unfocusedBorderColor = Purple,
@@ -155,6 +170,7 @@ fun signup(onLoginClick: () -> Unit,
             label = { Text("Phone Number") },
             singleLine = true,
             modifier = Modifier.fillMaxWidth(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = Purple,
                 unfocusedBorderColor = Purple,
@@ -167,8 +183,18 @@ fun signup(onLoginClick: () -> Unit,
 
         Button(
             onClick = {
-                val user=User(email=email,name=name,phoneuser = phone.toLong(),role="attendee")
-                viewmodel.signup(user, password)},
+                if (email.isNotBlank() && password.isNotBlank() && name.isNotBlank()) {
+                    val user = User(
+                        email = email.trim(),
+                        name = name.trim(),
+                        phoneuser = phone.toLongOrNull() ?: 0L,
+                        role = "attendee"
+                    )
+                    viewmodel.signup(user, password)
+                } else {
+                    Toast.makeText(context, "Please fill in all fields", Toast.LENGTH_SHORT).show()
+                }
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp),

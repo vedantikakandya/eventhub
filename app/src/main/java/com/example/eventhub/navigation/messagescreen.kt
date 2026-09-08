@@ -1,4 +1,4 @@
-package com.example.eventhub.ui.messages
+package com.example.eventhub.navigation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -61,9 +61,7 @@ fun MessagesScreen(
 
         Text(
             text = "Messages",
-
             fontSize = 28.sp,
-
             fontWeight = FontWeight.Bold
         )
 
@@ -72,37 +70,26 @@ fun MessagesScreen(
         )
 
         if (chats.isEmpty()) {
-
             Box(
                 modifier = Modifier
                     .fillMaxSize(),
-
                 contentAlignment = Alignment.Center
             ) {
-
                 Text(
                     text = "No messages yet",
-
                     color = Color.Gray
                 )
             }
-
         } else {
-
             Column(
-                verticalArrangement =
-                    Arrangement.spacedBy(8.dp)
+                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-
                 chats.forEach { chat ->
-
                     ChatItem(
                         eventTitle = chat.eventTitle,
                         organiserName = chat.organiserName,
                         lastMessage = chat.lastMessage,
-                        lastMessageTime =
-                            chat.lastMessageTime,
-
+                        lastMessageTime = chat.lastMessageTime,
                         onClick = {
                             onChatClick(chat.chatId)
                         }
@@ -113,7 +100,6 @@ fun MessagesScreen(
     }
 }
 
-
 @Composable
 private fun ChatItem(
     eventTitle: String,
@@ -122,13 +108,10 @@ private fun ChatItem(
     lastMessageTime: Long,
     onClick: () -> Unit
 ) {
-
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(
-                RoundedCornerShape(16.dp)
-            )
+            .clip(RoundedCornerShape(16.dp))
             .clickable {
                 onClick()
             }
@@ -136,31 +119,18 @@ private fun ChatItem(
                 vertical = 12.dp,
                 horizontal = 4.dp
             ),
-
-        verticalAlignment =
-            Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically
     ) {
-
         Box(
             modifier = Modifier
                 .size(52.dp)
                 .clip(CircleShape)
-                .background(
-                    MaterialTheme.colorScheme
-                        .primary
-                ),
-
-            contentAlignment =
-                Alignment.Center
+                .background(MaterialTheme.colorScheme.primary),
+            contentAlignment = Alignment.Center
         ) {
-
             Icon(
-                imageVector =
-                    Icons.Default.Person,
-
-                contentDescription =
-                    "Organiser",
-
+                imageVector = Icons.Default.Person,
+                contentDescription = "Organiser",
                 tint = Color.White
             )
         }
@@ -172,14 +142,10 @@ private fun ChatItem(
         Column(
             modifier = Modifier.weight(1f)
         ) {
-
             Text(
                 text = eventTitle,
-
                 fontSize = 16.sp,
-
-                fontWeight =
-                    FontWeight.SemiBold
+                fontWeight = FontWeight.SemiBold
             )
 
             Spacer(
@@ -187,47 +153,25 @@ private fun ChatItem(
             )
 
             Text(
-                text =
-                    if (lastMessage.isBlank())
-                        organiserName
-                    else
-                        lastMessage,
-
+                text = if (lastMessage.isBlank()) organiserName else lastMessage,
                 fontSize = 13.sp,
-
                 color = Color.Gray,
-
                 maxLines = 1
             )
         }
 
         if (lastMessageTime != 0L) {
-
             Text(
-                text = formatChatTime(
-                    lastMessageTime
-                ),
-
+                text = formatChatTime(lastMessageTime),
                 fontSize = 11.sp,
-
                 color = Color.Gray
             )
         }
     }
 }
 
-
-private fun formatChatTime(
-    timestamp: Long
-): String {
-
+private fun formatChatTime(timestamp: Long): String {
     val date = Date(timestamp)
-
-    val formatter =
-        SimpleDateFormat(
-            "hh:mm a",
-            Locale.getDefault()
-        )
-
+    val formatter = SimpleDateFormat("hh:mm a", Locale.getDefault())
     return formatter.format(date)
 }

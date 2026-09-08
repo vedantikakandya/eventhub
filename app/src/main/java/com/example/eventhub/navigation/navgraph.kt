@@ -12,7 +12,7 @@ import com.example.eventhub.ui.auth.signup
 import com.example.eventhub.ui.event.CreateEventScreen
 import com.example.eventhub.ui.event.eventdetails
 import com.example.eventhub.ui.home.homescreen
-import com.example.eventhub.ui.messages.MessagesScreen
+import com.example.eventhub.navigation.MessagesScreen
 import com.example.eventhub.ui.profile.BecomeVendorScreen
 import com.example.eventhub.ui.profile.EditProfileScreen
 import com.example.eventhub.ui.profile.MyBusinessScreen
