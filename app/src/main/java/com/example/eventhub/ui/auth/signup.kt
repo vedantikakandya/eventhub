@@ -233,7 +233,7 @@ fun signup(onLoginClick: () -> Unit,
             }
         }
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(25.dp))
     }
 }
 
