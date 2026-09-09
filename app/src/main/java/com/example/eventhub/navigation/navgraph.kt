@@ -131,7 +131,13 @@ fun appnav(navController: NavHostController){
         }
 
         composable(screen.becomevendor.route) {
-            BecomeVendorScreen()
+            BecomeVendorScreen(
+                onVendorCreated = {
+                    navController.navigate(screen.mybusiness.route){
+                        popUpTo(screen.becomevendor.route) { inclusive = true }
+                    }
+                }
+            )
         }
 
         composable(screen.myevents.route) {

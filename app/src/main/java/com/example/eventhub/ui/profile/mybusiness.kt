@@ -32,7 +32,6 @@ fun MyBusinessScreen(
 
     onEditEventClick: (String) -> Unit,
     onCreateEventClick: () -> Unit,
-    vendorviewmodel: vendorviewmodel=viewModel(),
     eventViewModel: eventviewmodel = viewModel()
 
 ) {

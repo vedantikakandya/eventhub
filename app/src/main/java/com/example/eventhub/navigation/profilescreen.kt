@@ -1,6 +1,7 @@
 package com.example.eventhub.navigation
 
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -14,20 +15,30 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.eventhub.viewmodel.vendorviewmodel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 @Composable
 fun ProfileScreen(
-    navController: NavController
+    navController: NavController,
+    vendorViewModel: vendorviewmodel =
+        viewModel()
+
 ) {
 
+    val isVendor by
+    vendorViewModel.isVendor.collectAsState()
+
+    val context =
+        LocalContext.current
     var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
 
@@ -108,7 +119,27 @@ fun ProfileScreen(
             title = "My Business",
             icon = Icons.Default.Build
         ) {
-            navController.navigate(screen.mybusiness.route)
+            vendorViewModel.checkIfVendor { isVendor ->
+
+                if (isVendor) {
+
+                    navController.navigate(
+                        screen.mybusiness.route
+                    )
+
+                } else {
+
+                    Toast.makeText(
+                        context,
+                        "First register yourself as a vendor",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                    navController.navigate(
+                        screen.becomevendor.route
+                    )
+                }
+            }
         }
 
         Spacer(modifier = Modifier.weight(1f))

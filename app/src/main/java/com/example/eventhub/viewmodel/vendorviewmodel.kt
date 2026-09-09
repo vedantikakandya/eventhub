@@ -23,7 +23,45 @@ class vendorviewmodel : ViewModel() {
     private val _vendors = MutableStateFlow<List<vendor>>(emptyList())
     val vendors: StateFlow<List<vendor>> = _vendors
 
+    private val _isVendor =
+        MutableStateFlow<Boolean?>(null)
 
+    val isVendor: StateFlow<Boolean?> =
+        _isVendor
+
+
+    fun checkIfVendor(
+        onResult: (Boolean) -> Unit
+    ) {
+
+        val uid =
+            FirebaseAuth.getInstance()
+                .currentUser?.uid
+
+        if (uid == null) {
+
+            onResult(false)
+
+            return
+        }
+
+        firestore.collection("vendor")
+            .whereEqualTo(
+                "userid",
+                uid
+            )
+            .get()
+            .addOnSuccessListener { result ->
+
+                onResult(
+                    !result.isEmpty
+                )
+            }
+            .addOnFailureListener {
+
+                onResult(false)
+            }
+    }
     fun fetchMyBusinesses(){
 
         val uid =
