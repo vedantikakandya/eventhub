@@ -23,7 +23,6 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.eventhub.ui.theme.Purple
-import com.example.eventhub.ui.theme.Purplemidium
 import com.example.eventhub.viewmodel.vendorviewmodel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -35,9 +34,6 @@ fun ProfileScreen(
         viewModel()
 
 ) {
-
-    val isVendor by
-    vendorViewModel.isVendor.collectAsState()
 
     val context =
         LocalContext.current

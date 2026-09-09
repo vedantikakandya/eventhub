@@ -1,7 +1,6 @@
 package com.example.eventhub.ui.profile
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import com.example.eventhub.ui.common.EventHubTopBar
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn

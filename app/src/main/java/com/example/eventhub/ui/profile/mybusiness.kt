@@ -27,7 +27,6 @@ import com.example.eventhub.R
 import com.example.eventhub.data.model.event
 import com.example.eventhub.data.model.vendor
 import com.example.eventhub.viewmodel.eventviewmodel
-import com.example.eventhub.viewmodel.vendorviewmodel
 
 @Composable
 fun MyBusinessScreen(

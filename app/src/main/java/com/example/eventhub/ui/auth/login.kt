@@ -41,7 +41,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.eventhub.R
-import com.example.eventhub.data.model.User
 import com.example.eventhub.ui.theme.Purple
 import com.example.eventhub.viewmodel.authviewmodel
 

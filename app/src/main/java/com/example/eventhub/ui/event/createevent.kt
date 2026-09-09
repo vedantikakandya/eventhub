@@ -43,9 +43,7 @@ fun CreateEventScreen(
     onBackClick: () -> Unit = {},
 
     eventViewModel: eventviewmodel = viewModel(),
-
-    onEditClick: (String) -> Unit = {}
-){
+    ){
 
     val selectedEvent by eventViewModel.selectedEvent.collectAsState()
 

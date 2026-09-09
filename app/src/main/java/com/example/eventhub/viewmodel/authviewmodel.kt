@@ -1,6 +1,5 @@
 package com.example.eventhub.viewmodel
 
-import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import com.example.eventhub.data.firebase.authfirebase
 import com.example.eventhub.data.model.User

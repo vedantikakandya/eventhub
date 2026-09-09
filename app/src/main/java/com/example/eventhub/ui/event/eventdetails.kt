@@ -1,7 +1,6 @@
 package com.example.eventhub.ui.event
 
 import android.widget.Toast
-import com.example.eventhub.ui.common.EventHubTopBar
 import com.example.eventhub.viewmodel.MessageViewModel
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -15,7 +14,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -45,9 +43,7 @@ fun eventdetails(
     initialEvent: event? = null,
     eventViewModel: eventviewmodel = viewModel(),
     messageViewModel: MessageViewModel = viewModel(),
-    onChatClick: (String) -> Unit = {},
-    onBackClick: () -> Unit = {},
-    onregisterclick: () -> Unit = {}
+    onChatClick: (String) -> Unit = {}
 ) {
     val context = LocalContext.current
     var isRegistered by remember {
@@ -85,7 +81,7 @@ fun eventdetails(
             ) {
                 Text(
                     text = displayEvent.eventname,
-                    fontSize = 14.sp,
+                    fontSize = 24.sp,
                     fontWeight = FontWeight.Bold
                 )
                 Row(
@@ -94,27 +90,26 @@ fun eventdetails(
                 ) {
                     Text(
                         text = displayEvent.category,
-                        fontSize = 8.sp,
+                        fontSize = 14.sp,
                         color = Color.Gray
                     )
                     Text(
                         text = displayEvent.status,
-                        fontSize = 8.sp,
+                        fontSize = 14.sp,
                         color = Color.Gray
                     )
 
                 }
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = "About Event",
+                    text = "About",
                     fontWeight = FontWeight.SemiBold,
-                    fontSize = 14.sp
+                    fontSize = 20.sp
                 )
-                Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
                     text = displayEvent.eventdescription,
-                    fontSize = 12.sp,
+                    fontSize = 18.sp,
                     color = Color.Gray
                 )
                 Spacer(modifier = Modifier.height(16.dp))
@@ -122,23 +117,22 @@ fun eventdetails(
                 Text(
                     text = "Location",
                     fontWeight = FontWeight.SemiBold,
-                    fontSize = 14.sp
+                    fontSize = 20.sp
                 )
                 Text(
                     text = displayEvent.eventlocation,
-                    fontSize = 12.sp,
+                    fontSize = 18.sp,
                     color = Color.Gray,
-                    fontWeight = FontWeight.SemiBold
                 )
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(
                     text = "Organiser",
                     fontWeight = FontWeight.SemiBold,
-                    fontSize = 14.sp
+                    fontSize = 20.sp
                 )
                 Text(
                     text = displayEvent.organisername,
-                    fontSize = 12.sp,
+                    fontSize = 18.sp,
                     color = Color.Gray
                 )
 
@@ -147,14 +141,14 @@ fun eventdetails(
                 Text(
                     text = "Capacity",
                     fontWeight = FontWeight.SemiBold,
-                    fontSize = 14.sp
+                    fontSize = 20.sp
                 )
                 Text(
                     text = "${displayEvent.registeredcount}/${displayEvent.capacity}",
-                    fontSize = 12.sp,
+                    fontSize = 18.sp,
                     color = Color.Gray
                 )
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(20.dp))
                 Button(
                     onClick = {
                         eventViewModel.registerForEvent(
