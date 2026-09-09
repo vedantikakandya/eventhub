@@ -2,6 +2,7 @@ package com.example.eventhub.ui.profile
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import com.example.eventhub.ui.common.EventHubTopBar
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -28,7 +29,8 @@ import com.example.eventhub.viewmodel.eventviewmodel
 @Composable
 fun MyEventsScreen(
     eventViewModel: eventviewmodel = viewModel(),
-    onEventClick: (String) -> Unit = {}
+    onEventClick: (String) -> Unit = {},
+    onBackClick: () -> Unit = {}
 ) {
 
     val myEvents by eventViewModel.myEvents.collectAsState()
@@ -48,45 +50,14 @@ fun MyEventsScreen(
             ignoreCase = true
         )
     }
+    Scaffold(
 
-    Box(
-        modifier = Modifier.fillMaxSize()
-    ) {
 
-        Column(
-            modifier = Modifier.fillMaxSize()
-        ) {
-
-            // HEADER
-
-            Surface(
-                color = Purple,
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(
-                    bottomStart = 30.dp,
-                    bottomEnd = 30.dp
-                )
-            ) {
-
-                Column(
-                    modifier = Modifier.padding(16.dp)
-                ) {
-
-                    Spacer(
-                        modifier = Modifier.height(24.dp)
-                    )
-
-                    Text(
-                        text = "My Events",
-                        color = Color.White,
-                        fontSize = 22.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-
-                    Spacer(
-                        modifier = Modifier.height(12.dp)
-                    )
-
+        topBar = {
+            EventHubTopBar(
+                title = "My Events",
+                onBackClick = onBackClick,
+                searchBar = {
                     OutlinedTextField(
                         value = searchQuery,
                         onValueChange = {
@@ -111,62 +82,61 @@ fun MyEventsScreen(
                             unfocusedBorderColor = Color.Transparent
                         )
                     )
-
-                    Spacer(
-                        modifier = Modifier.height(12.dp)
-                    )
                 }
-            }
-
-            Spacer(
-                modifier = Modifier.height(12.dp)
             )
+        }
 
-            Text(
-                text = "My Events",
-                modifier = Modifier.padding(horizontal = 16.dp),
-                fontWeight = FontWeight.Bold
-            )
+    ) { innerPadding ->
+        Box(
+            modifier = Modifier.fillMaxSize()
+        ) {
 
-            Spacer(
-                modifier = Modifier.height(8.dp)
-            )
+            Column(
+                modifier = Modifier.fillMaxSize().padding(innerPadding)
+            ) {
 
-            if(filteredEvents.isEmpty()) {
 
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
 
-                    Text(
-                        text = "No Registered Events"
-                    )
-                }
-            }
 
-            else {
 
-                LazyColumn(
-                    contentPadding = PaddingValues(
-                        horizontal = 16.dp,
-                        vertical = 8.dp
-                    )
-                ) {
+                Spacer(
+                    modifier = Modifier.height(8.dp)
+                )
 
-                    items(filteredEvents) { event ->
+                if (filteredEvents.isEmpty()) {
 
-                        MyEventCard(
-                            event = event,
-                            onClick = {
-                                onEventClick(event.eventId)
-                            }
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+
+                        Text(
+                            text = "No Registered Events"
                         )
+                    }
+                } else {
+
+                    LazyColumn(
+                        contentPadding = PaddingValues(
+                            horizontal = 16.dp,
+                            vertical = 8.dp
+                        )
+                    ) {
+
+                        items(filteredEvents) { event ->
+
+                            MyEventCard(
+                                event = event,
+                                onClick = {
+                                    onEventClick(event.eventId)
+                                }
+                            )
+                        }
                     }
                 }
             }
-        }
 
+        }
     }
 }
 

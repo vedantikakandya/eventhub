@@ -1,6 +1,7 @@
 package com.example.eventhub.ui.event
 
 import android.widget.Toast
+import com.example.eventhub.ui.common.EventHubTopBar
 import com.example.eventhub.viewmodel.MessageViewModel
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -44,7 +46,7 @@ fun eventdetails(
     eventViewModel: eventviewmodel = viewModel(),
     messageViewModel: MessageViewModel = viewModel(),
     onChatClick: (String) -> Unit = {},
-
+    onBackClick: () -> Unit = {},
     onregisterclick: () -> Unit = {}
 ) {
     val context = LocalContext.current
@@ -62,163 +64,172 @@ fun eventdetails(
         }
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.eventdetail_placeholder),
-            contentDescription = "event image",
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(260.dp),
-            contentScale = ContentScale.Crop
-        )
+
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.White)
         ) {
-            Text(
-                text = displayEvent.eventname,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Bold
-            )
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(
-                    text = displayEvent.category,
-                    fontSize = 8.sp,
-                    color = Color.Gray
-                )
-                Text(
-                    text = displayEvent.status,
-                    fontSize = 8.sp,
-                    color = Color.Gray
-                )
-
-            }
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = "About Event",
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 14.sp
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Text(
-                text = displayEvent.eventdescription,
-                fontSize = 12.sp,
-                color = Color.Gray
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Text(
-                text = "Location",
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 14.sp
-            )
-            Text(
-                text = displayEvent.eventlocation,
-                fontSize = 12.sp,
-                color = Color.Gray,
-                fontWeight = FontWeight.SemiBold
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-            Text(
-                text = "Organiser",
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 14.sp
-            )
-            Text(
-                text = displayEvent.organisername,
-                fontSize = 12.sp,
-                color = Color.Gray
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Text(
-                text = "Capacity",
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 14.sp
-            )
-            Text(
-                text = "${displayEvent.registeredcount}/${displayEvent.capacity}",
-                fontSize = 12.sp,
-                color = Color.Gray
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-            Button(
-                onClick = {
-                    eventViewModel.registerForEvent(
-                        eventId = displayEvent.eventId,
-                        eventTitle = displayEvent.eventname,
-                        onSuccess = {
-                            eventViewModel.fetchEventById(eventId)
-                            isRegistered=true
-                            Toast.makeText(context, "Registered Successfully", Toast.LENGTH_SHORT).show()
-                        },
-                        onFailure = {error ->
-                            Toast.makeText(context,error, Toast.LENGTH_SHORT).show()
-
-                        }
-                    )
-                },
+            Image(
+                painter = painterResource(id = R.drawable.eventdetail_placeholder),
+                contentDescription = "event image",
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(48.dp),
-                shape = RoundedCornerShape(12.dp)
-            ) {
-                Text(
-                    if (isRegistered)
-                        "Registered!!!!"
-                    else
-                        "Register"
-                )
-
-            }
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Button(
-                onClick = {
-
-                    messageViewModel.createOrGetChat(
-                        eventId = displayEvent.eventId,
-                        eventTitle = displayEvent.eventname,
-                        organiserId = displayEvent.organiserid,
-                        organiserName = displayEvent.organisername,
-
-                        onSuccess = { chatId ->
-
-                            onChatClick(chatId)
-
-                        },
-
-                        onFailure = { error ->
-
-                            Toast.makeText(
-                                context,
-                                error,
-                                Toast.LENGTH_SHORT
-                            ).show()
-
-                        }
-                    )
-                },
-
+                    .height(260.dp),
+                contentScale = ContentScale.Crop
+            )
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(48.dp),
-
-                shape = RoundedCornerShape(12.dp)
+                    .padding(16.dp)
             ) {
+                Text(
+                    text = displayEvent.eventname,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        text = displayEvent.category,
+                        fontSize = 8.sp,
+                        color = Color.Gray
+                    )
+                    Text(
+                        text = displayEvent.status,
+                        fontSize = 8.sp,
+                        color = Color.Gray
+                    )
 
-                Text("Contact Organiser")
+                }
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = "About Event",
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 14.sp
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Text(
+                    text = displayEvent.eventdescription,
+                    fontSize = 12.sp,
+                    color = Color.Gray
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Text(
+                    text = "Location",
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 14.sp
+                )
+                Text(
+                    text = displayEvent.eventlocation,
+                    fontSize = 12.sp,
+                    color = Color.Gray,
+                    fontWeight = FontWeight.SemiBold
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+                Text(
+                    text = "Organiser",
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 14.sp
+                )
+                Text(
+                    text = displayEvent.organisername,
+                    fontSize = 12.sp,
+                    color = Color.Gray
+                )
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                Text(
+                    text = "Capacity",
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 14.sp
+                )
+                Text(
+                    text = "${displayEvent.registeredcount}/${displayEvent.capacity}",
+                    fontSize = 12.sp,
+                    color = Color.Gray
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+                Button(
+                    onClick = {
+                        eventViewModel.registerForEvent(
+                            eventId = displayEvent.eventId,
+                            eventTitle = displayEvent.eventname,
+                            onSuccess = {
+                                eventViewModel.fetchEventById(eventId)
+                                isRegistered = true
+                                Toast.makeText(
+                                    context,
+                                    "Registered Successfully",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            },
+                            onFailure = { error ->
+                                Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
+
+                            }
+                        )
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(48.dp),
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+                    Text(
+                        if (isRegistered)
+                            "Registered!!!!"
+                        else
+                            "Register"
+
+                    ,color = Color.White)
+
+                }
+                Spacer(modifier = Modifier.height(12.dp))
+
+                Button(
+                    onClick = {
+
+                        messageViewModel.createOrGetChat(
+                            eventId = displayEvent.eventId,
+                            eventTitle = displayEvent.eventname,
+                            organiserId = displayEvent.organiserid,
+                            organiserName = displayEvent.organisername,
+
+                            onSuccess = { chatId ->
+
+                                onChatClick(chatId)
+
+                            },
+
+                            onFailure = { error ->
+
+                                Toast.makeText(
+                                    context,
+                                    error,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+
+                            }
+                        )
+                    },
+
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(48.dp),
+
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+
+                    Text("Contact Organiser",color = Color.White)
+                }
             }
         }
-    }
+
 }
 
 

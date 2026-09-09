@@ -1,6 +1,7 @@
 package com.example.eventhub.ui.event
 
 import android.widget.Toast
+import com.example.eventhub.ui.common.EventHubTopBar
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -17,6 +18,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -38,6 +40,7 @@ import com.example.eventhub.viewmodel.eventviewmodel
 @Composable
 fun CreateEventScreen(
     eventId: String?,
+    onBackClick: () -> Unit = {},
 
     eventViewModel: eventviewmodel = viewModel(),
 
@@ -101,222 +104,240 @@ fun CreateEventScreen(
         }
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
-    ) {
+    Scaffold(
 
-        Image(
-            painter = painterResource(R.drawable.event_placeholder),
-            contentDescription = null,
+        topBar = {
+
+            EventHubTopBar(
+
+                title = "Create Event",
+
+                onBackClick = onBackClick
+            )
+        }
+
+    ) { innerPadding ->
+
+
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(250.dp),
-            contentScale = ContentScale.Crop
-        )
-
-        Column (
-            modifier = Modifier.padding(16.dp)
+                .fillMaxSize()
+                .background(Color.White).padding(innerPadding)
         ) {
 
-            OutlinedTextField(
-                value = eventName,
-                onValueChange = {
-                    eventName = it
-                },
-                label = {
-                    Text("Event Name")
-                },
-                modifier = Modifier.fillMaxWidth()
+            Image(
+                painter = painterResource(R.drawable.event_placeholder),
+                contentDescription = null,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(250.dp),
+                contentScale = ContentScale.Crop
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
-
-            ExposedDropdownMenuBox(
-                expanded = expanded,
-                onExpandedChange = {
-                    expanded = !expanded
-                }
+            Column(
+                modifier = Modifier.padding(16.dp)
             ) {
 
                 OutlinedTextField(
-                    value = category,
-                    onValueChange = {},
-                    readOnly = true,
+                    value = eventName,
+                    onValueChange = {
+                        eventName = it
+                    },
                     label = {
-                        Text("Category")
+                        Text("Event Name")
                     },
-                    trailingIcon = {
-                        ExposedDropdownMenuDefaults.TrailingIcon(
-                            expanded = expanded
-                        )
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .menuAnchor()
+                    modifier = Modifier.fillMaxWidth()
                 )
 
-                ExposedDropdownMenu(
+                Spacer(modifier = Modifier.height(8.dp))
+
+                ExposedDropdownMenuBox(
                     expanded = expanded,
-                    onDismissRequest = {
-                        expanded = false
+                    onExpandedChange = {
+                        expanded = !expanded
                     }
                 ) {
 
-                    categories.forEach {
+                    OutlinedTextField(
+                        value = category,
+                        onValueChange = {},
+                        readOnly = true,
+                        label = {
+                            Text("Category")
+                        },
+                        trailingIcon = {
+                            ExposedDropdownMenuDefaults.TrailingIcon(
+                                expanded = expanded
+                            )
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .menuAnchor()
+                    )
 
-                        DropdownMenuItem(
-                            text = {
-                                Text(it)
-                            },
-                            onClick = {
-                                category = it
-                                expanded = false
-                            }
-                        )
+                    ExposedDropdownMenu(
+                        expanded = expanded,
+                        onDismissRequest = {
+                            expanded = false
+                        }
+                    ) {
+
+                        categories.forEach {
+
+                            DropdownMenuItem(
+                                text = {
+                                    Text(it)
+                                },
+                                onClick = {
+                                    category = it
+                                    expanded = false
+                                }
+                            )
+                        }
                     }
                 }
-            }
 
-            Spacer(modifier = Modifier.height(12.dp))
-
-            OutlinedTextField(
-                value = location,
-                onValueChange = {
-                    location = it
-                },
-                label = {
-                    Text("Location")
-                },
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            OutlinedTextField(
-                value = description,
-                onValueChange = {
-                    description = it
-                },
-                label = {
-                    Text("Description")
-                },
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            OutlinedTextField(
-                value = capacity,
-                onValueChange = {
-                    capacity = it
-                },
-                label = {
-                    Text("Capacity")
-                },
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            ExposedDropdownMenuBox(
-                expanded = statusExpanded,
-                onExpandedChange = {
-                    statusExpanded = !statusExpanded
-                }
-            ) {
+                Spacer(modifier = Modifier.height(12.dp))
 
                 OutlinedTextField(
-                    value = status,
-                    onValueChange = {},
-                    readOnly = true,
+                    value = location,
+                    onValueChange = {
+                        location = it
+                    },
                     label = {
-                        Text("Status")
+                        Text("Location")
                     },
-                    trailingIcon = {
-                        ExposedDropdownMenuDefaults.TrailingIcon(
-                            expanded = statusExpanded
-                        )
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .menuAnchor()
+                    modifier = Modifier.fillMaxWidth()
                 )
 
-                ExposedDropdownMenu(
+                Spacer(modifier = Modifier.height(12.dp))
+
+                OutlinedTextField(
+                    value = description,
+                    onValueChange = {
+                        description = it
+                    },
+                    label = {
+                        Text("Description")
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                OutlinedTextField(
+                    value = capacity,
+                    onValueChange = {
+                        capacity = it
+                    },
+                    label = {
+                        Text("Capacity")
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                ExposedDropdownMenuBox(
                     expanded = statusExpanded,
-                    onDismissRequest = {
-                        statusExpanded = false
+                    onExpandedChange = {
+                        statusExpanded = !statusExpanded
                     }
                 ) {
 
-                    statusOptions.forEach {
+                    OutlinedTextField(
+                        value = status,
+                        onValueChange = {},
+                        readOnly = true,
+                        label = {
+                            Text("Status")
+                        },
+                        trailingIcon = {
+                            ExposedDropdownMenuDefaults.TrailingIcon(
+                                expanded = statusExpanded
+                            )
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .menuAnchor()
+                    )
 
-                        DropdownMenuItem(
-                            text = {
-                                Text(it)
-                            },
-                            onClick = {
-                                status = it
-                                statusExpanded = false
-                            }
-                        )
+                    ExposedDropdownMenu(
+                        expanded = statusExpanded,
+                        onDismissRequest = {
+                            statusExpanded = false
+                        }
+                    ) {
+
+                        statusOptions.forEach {
+
+                            DropdownMenuItem(
+                                text = {
+                                    Text(it)
+                                },
+                                onClick = {
+                                    status = it
+                                    statusExpanded = false
+                                }
+                            )
+                        }
                     }
                 }
+
+
+                Spacer(modifier = Modifier.height(20.dp))
+
+                Button(
+                    onClick = {
+
+                        if (isEditMode) {
+                            eventViewModel.updateEvent(
+                                eventId = eventId!!,
+                                eventName = eventName,
+                                description = description,
+                                location = location,
+                                category = category,
+                                capacity = capacity.toIntOrNull() ?: 0,
+                                status = status,
+                                onSuccess = {
+                                    Toast.makeText(context, "Event Updated", Toast.LENGTH_SHORT)
+                                        .show()
+                                }
+                            )
+
+
+                        } else {
+
+                            eventViewModel.createEvent(
+                                eventName = eventName,
+                                description = description,
+                                location = location,
+                                category = category,
+                                capacity = capacity.toIntOrNull() ?: 0,
+                                status = status,
+                                onSuccess = {
+                                    Toast.makeText(context, "Event Created", Toast.LENGTH_SHORT)
+                                        .show()
+                                },
+                                onFailure = { error ->
+                                    Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
+                                }
+                            )
+
+                        }
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+
+                    Text(
+                        if (isEditMode)
+                            "Update Event"
+                        else
+                            "Create Event"
+                    )
+                }
+
             }
-
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-            Button(
-                onClick = {
-
-                    if (isEditMode) {
-                        eventViewModel.updateEvent(
-                            eventId = eventId!!,
-                            eventName = eventName,
-                            description = description,
-                            location = location,
-                            category = category,
-                            capacity = capacity.toIntOrNull() ?: 0,
-                            status = status,
-                            onSuccess = {
-                                Toast.makeText(context, "Event Updated", Toast.LENGTH_SHORT).show()
-                            }
-                        )
-
-
-                    } else {
-
-                        eventViewModel.createEvent(
-                            eventName = eventName,
-                            description = description,
-                            location = location,
-                            category = category,
-                            capacity = capacity.toIntOrNull() ?: 0,
-                            status = status,
-                            onSuccess = {
-                                Toast.makeText(context, "Event Created", Toast.LENGTH_SHORT).show()
-                            },
-                            onFailure = { error ->
-                                Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
-                            }
-                        )
-
-                    }
-                },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-
-                Text(
-                    if (isEditMode)
-                        "Update Event"
-                    else
-                        "Create Event"
-                )
-            }
-
         }
     }
 }

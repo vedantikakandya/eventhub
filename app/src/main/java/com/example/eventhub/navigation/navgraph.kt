@@ -12,7 +12,6 @@ import com.example.eventhub.ui.auth.signup
 import com.example.eventhub.ui.event.CreateEventScreen
 import com.example.eventhub.ui.event.eventdetails
 import com.example.eventhub.ui.home.homescreen
-import com.example.eventhub.navigation.MessagesScreen
 import com.example.eventhub.ui.profile.BecomeVendorScreen
 import com.example.eventhub.ui.profile.EditProfileScreen
 import com.example.eventhub.ui.profile.MyBusinessScreen
@@ -89,7 +88,14 @@ fun appnav(navController: NavHostController){
             vendorprofile(vendorId = vendorId ?: "")
         }
         composable(screen.explore.route) {
-            ExploreScreen()
+            ExploreScreen(
+                onEventClick = { eventId ->
+                    navController.navigate(screen.eventdetails.createRoute(eventId))
+                },
+                onBackClick = {
+                    navController.popBackStack()
+                }
+            )
         }
         composable(screen.messages.route) {
 
@@ -185,11 +191,13 @@ fun appnav(navController: NavHostController){
                 },
 
                 onCreateEventClick = {
-
                     navController.navigate(
-                        screen.createevent
-                            .baseRoute
+                        screen.createevent.route
                     )
+
+                },
+                onBackClick = {
+                    navController.popBackStack()
                 }
             )
         }

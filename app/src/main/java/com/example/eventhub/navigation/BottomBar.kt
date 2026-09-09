@@ -22,7 +22,6 @@ import com.example.eventhub.ui.theme.Purplemidium
 fun BottomBar(
     navController: NavController
 ) {
-    val isDark = isSystemInDarkTheme()
 
     // Light mode colors
     val selectedPurple = Purple
@@ -52,7 +51,7 @@ fun BottomBar(
     )
 
     NavigationBar(
-        containerColor = if (isDark) Color(0xFF1C1B1F) else Color.White
+        containerColor = Color.White
     ) {
         val navBackStackEntry = navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry.value?.destination?.route
@@ -83,10 +82,10 @@ fun BottomBar(
                     Text(text = item.title)
                 },
                 colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = if (isDark) Color.White else selectedPurple,
-                    selectedTextColor = if (isDark) Color.White else selectedPurple,
-                    unselectedIconColor = if (isDark) Color.LightGray else unselectedPurple,
-                    unselectedTextColor = if (isDark) Color.LightGray else unselectedPurple,
+                    selectedIconColor = selectedPurple,
+                    selectedTextColor = selectedPurple,
+                    unselectedIconColor = unselectedPurple,
+                    unselectedTextColor = unselectedPurple,
                     indicatorColor = Color.Transparent
                 )
             )

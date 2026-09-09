@@ -1,6 +1,7 @@
 package com.example.eventhub.ui.profile
 
 import android.widget.Toast
+import com.example.eventhub.ui.common.EventHubTopBar
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -20,7 +21,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 @Composable
-fun EditProfileScreen() {
+fun EditProfileScreen(
+    onBackClick: () -> Unit = {}
+) {
 
     val context = LocalContext.current
 
@@ -50,127 +53,141 @@ fun EditProfileScreen() {
                 }
         }
     }
+    Scaffold(
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFFF8F2FA))
-            .padding(20.dp)
-    ) {
+        topBar = {
 
-        Spacer(modifier = Modifier.height(20.dp))
+            EventHubTopBar(
 
-        Box(
-            modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.Center
+                title = "Edit Profile",
+
+                onBackClick = onBackClick
+            )
+        }
+
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color(0xFFF8F2FA))
+                .padding(20.dp).padding(innerPadding)
         ) {
 
-            Surface(
-                modifier = Modifier.size(120.dp),
-                shape = CircleShape,
-                color = Color.LightGray
+            Spacer(modifier = Modifier.height(20.dp))
+
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.Center
             ) {
 
-                Box(
-                    contentAlignment = Alignment.Center
+                Surface(
+                    modifier = Modifier.size(120.dp),
+                    shape = CircleShape,
+                    color = Color.LightGray
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.Person,
-                        contentDescription = null,
-                        modifier = Modifier.size(60.dp)
+
+                    Box(
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Person,
+                            contentDescription = null,
+                            modifier = Modifier.size(60.dp)
+                        )
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(20.dp)
+            ) {
+
+                Column(
+                    modifier = Modifier.padding(16.dp)
+                ) {
+
+                    Text("Username")
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    OutlinedTextField(
+                        value = name,
+                        onValueChange = {
+                            name = it
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Text("Email")
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    OutlinedTextField(
+                        value = email,
+                        onValueChange = {
+                            email = it
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Text("Phone Number")
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    OutlinedTextField(
+                        value = phone,
+                        onValueChange = {
+                            phone = it
+                        },
+                        modifier = Modifier.fillMaxWidth()
                     )
                 }
             }
-        }
 
-        Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.weight(1f))
 
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(20.dp)
-        ) {
+            Button(
+                onClick = {
 
-            Column(
-                modifier = Modifier.padding(16.dp)
+                    uid?.let {
+
+                        firestore.collection("users")
+                            .document(it)
+                            .update(
+                                mapOf(
+                                    "name" to name,
+                                    "email" to email,
+                                    "phoneuser" to (phone.toLongOrNull() ?: 0)
+                                )
+                            )
+                            .addOnSuccessListener {
+
+                                Toast.makeText(
+                                    context,
+                                    "Profile Updated",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                    }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(55.dp),
+                shape = RoundedCornerShape(14.dp)
             ) {
-
-                Text("Username")
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                OutlinedTextField(
-                    value = name,
-                    onValueChange = {
-                        name = it
-                    },
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Text("Email")
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                OutlinedTextField(
-                    value = email,
-                    onValueChange = {
-                        email = it
-                    },
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Text("Phone Number")
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                OutlinedTextField(
-                    value = phone,
-                    onValueChange = {
-                        phone = it
-                    },
-                    modifier = Modifier.fillMaxWidth()
+                Text(
+                    text = "Save Changes",
+                    fontSize = 16.sp,
+                    color = Color.White
                 )
             }
-        }
-
-        Spacer(modifier = Modifier.weight(1f))
-
-        Button(
-            onClick = {
-
-                uid?.let {
-
-                    firestore.collection("users")
-                        .document(it)
-                        .update(
-                            mapOf(
-                                "name" to name,
-                                "email" to email,
-                                "phoneuser" to (phone.toLongOrNull() ?: 0)
-                            )
-                        )
-                        .addOnSuccessListener {
-
-                            Toast.makeText(
-                                context,
-                                "Profile Updated",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                }
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(55.dp),
-            shape = RoundedCornerShape(14.dp)
-        ) {
-            Text(
-                text = "Save Changes",
-                fontSize = 16.sp
-            )
         }
     }
 }

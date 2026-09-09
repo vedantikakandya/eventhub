@@ -1,6 +1,7 @@
 package com.example.eventhub.ui.home
 
 import androidx.compose.foundation.layout.Arrangement
+import com.example.eventhub.ui.common.EventHubTopBar
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -26,6 +28,7 @@ import com.example.eventhub.viewmodel.vendorviewmodel
 fun homescreen(
     onEventClick: (String) -> Unit,
     onVendorClick: (String) -> Unit,
+    onBackClick: () -> Unit = {},
     eventViewModel: eventviewmodel = viewModel(),
     vendorViewModel: vendorviewmodel = viewModel()
 ){
@@ -36,48 +39,66 @@ fun homescreen(
         eventViewModel.fetchevents()
         vendorViewModel.fetchvendors()
     }
+    Scaffold(
 
-    Column(
-        modifier= Modifier.fillMaxSize().padding(horizontal = 16.dp ,vertical=16.dp)){
-        Text(
-            text = "Explore Events",
-            style = MaterialTheme.typography.titleLarge // Applied from Theme.kt
-        )
-        Spacer(modifier = Modifier.height(16.dp))
+        topBar = {
 
-        Row(
-            modifier=Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically) {
+            EventHubTopBar(
 
-            LazyRow() {
-                items(events.value) { eventItem ->
-                    EventCard(event = eventItem, onClick = { onEventClick(eventItem.eventId) })
-                }
-            }
+                title = "Home",
 
+                onBackClick = onBackClick
+            )
         }
 
-        Spacer(modifier = Modifier.height(22.dp))
-        Text(
-            text = "Explore Vendors",
-            style = MaterialTheme.typography.titleLarge // Applied from Theme.kt
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier.fillMaxSize().padding(innerPadding).padding(16.dp)
+        ) {
+
+            Text(
+                text = "Explore Events",
+                style = MaterialTheme.typography.titleLarge // Applied from Theme.kt
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+
+                LazyRow() {
+                    items(events.value) { eventItem ->
+                        EventCard(event = eventItem, onClick = { onEventClick(eventItem.eventId) })
+                    }
+                }
+
+            }
+
+            Spacer(modifier = Modifier.height(22.dp))
+            Text(
+                text = "Explore Vendors",
+                style = MaterialTheme.typography.titleLarge // Applied from Theme.kt
             )
 
-        Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
-        Row(
-            modifier=Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
 
-            LazyRow() {
-                items(vendors.value) { vendoritem ->
-                    vendorcard(vendor = vendoritem, onClick = { onVendorClick(vendoritem.vendorId) })
+                LazyRow() {
+                    items(vendors.value) { vendoritem ->
+                        vendorcard(
+                            vendor = vendoritem,
+                            onClick = { onVendorClick(vendoritem.vendorId) })
+                    }
                 }
-            }
 
+            }
         }
     }
-
 }

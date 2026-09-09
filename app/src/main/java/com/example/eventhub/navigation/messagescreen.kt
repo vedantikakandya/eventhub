@@ -1,6 +1,7 @@
 package com.example.eventhub.navigation
 
 import androidx.compose.foundation.background
+import com.example.eventhub.ui.common.EventHubTopBar
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,6 +19,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -39,7 +41,8 @@ import java.util.Locale
 @Composable
 fun MessagesScreen(
     onChatClick: (String) -> Unit,
-    viewModel: MessageViewModel = viewModel()
+    viewModel: MessageViewModel = viewModel(),
+    onBackClick: () -> Unit = {}
 ) {
 
     val chats by viewModel.chats.collectAsState()
@@ -48,52 +51,52 @@ fun MessagesScreen(
         viewModel.fetchChats()
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
-            .padding(horizontal = 16.dp)
-    ) {
+    Scaffold(
 
-        Spacer(
-            modifier = Modifier.height(24.dp)
-        )
+        topBar = {
 
-        Text(
-            text = "Messages",
-            fontSize = 28.sp,
-            fontWeight = FontWeight.Bold
-        )
+            EventHubTopBar(
 
-        Spacer(
-            modifier = Modifier.height(20.dp)
-        )
+                title = "Messages",
 
-        if (chats.isEmpty()) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "No messages yet",
-                    color = Color.Gray
-                )
-            }
-        } else {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                chats.forEach { chat ->
-                    ChatItem(
-                        eventTitle = chat.eventTitle,
-                        organiserName = chat.organiserName,
-                        lastMessage = chat.lastMessage,
-                        lastMessageTime = chat.lastMessageTime,
-                        onClick = {
-                            onChatClick(chat.chatId)
-                        }
+                onBackClick = onBackClick
+            )
+        }
+
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.White)
+                .padding(horizontal = 16.dp).padding(innerPadding)
+        ) {
+
+            if (chats.isEmpty()) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "No messages yet",
+                        color = Color.Gray
                     )
+                }
+            } else {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    chats.forEach { chat ->
+                        ChatItem(
+                            eventTitle = chat.eventTitle,
+                            organiserName = chat.organiserName,
+                            lastMessage = chat.lastMessage,
+                            lastMessageTime = chat.lastMessageTime,
+                            onClick = {
+                                onChatClick(chat.chatId)
+                            }
+                        )
+                    }
                 }
             }
         }

@@ -40,6 +40,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.eventhub.data.model.message
+import com.example.eventhub.ui.common.EventHubTopBar
 import com.example.eventhub.ui.theme.Purple
 import com.example.eventhub.ui.theme.Purplelight
 import com.example.eventhub.viewmodel.MessageViewModel
@@ -85,26 +86,11 @@ fun ChatScreen(
 
         topBar = {
 
-            TopAppBar(
+            EventHubTopBar(
 
-                title = {
-                    Text(
-                        text = "Event Chat"
-                    )
-                },
+                title = "Chat",
 
-                navigationIcon = {
-
-                    IconButton(
-                        onClick = onBackClick
-                    ) {
-
-                        Icon(
-                            imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "Back"
-                        )
-                    }
-                }
+                onBackClick = onBackClick
             )
         }
 
@@ -225,7 +211,8 @@ private fun MessageBubble(
                     text = message.text,
 
                     style =
-                        MaterialTheme.typography.bodyMedium
+                        MaterialTheme.typography.bodyMedium,
+                    color = Purple
                 )
 
                 Spacer(

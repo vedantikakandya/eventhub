@@ -2,6 +2,7 @@ package com.example.eventhub.ui.profile
 
 import android.widget.Toast
 import androidx.compose.foundation.background
+import com.example.eventhub.ui.common.EventHubTopBar
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -27,7 +28,8 @@ import com.google.firebase.auth.FirebaseAuth
 fun BecomeVendorScreen(
 
     vendorViewModel: vendorviewmodel = viewModel(),
-    onVendorCreated: () -> Unit = {}
+    onVendorCreated: () -> Unit = {},
+    onBackClick: () -> Unit = {}
 
 ) {
 
@@ -57,213 +59,228 @@ fun BecomeVendorScreen(
 
     val context = androidx.compose.ui.platform.LocalContext.current
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFFF8F2FA))
-            .verticalScroll(rememberScrollState())
-            .padding(20.dp)
-    ) {
+    Scaffold(
 
-        Spacer(modifier = Modifier.height(20.dp))
+        topBar = {
 
-        Box(
-            modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.Center
-        ) {
+            EventHubTopBar(
 
-            Box {
+                title = "Become a Vendor",
 
-                Surface(
-                    modifier = Modifier.size(140.dp),
-                    shape = CircleShape,
-                    color = Color.White,
-                    shadowElevation = 8.dp
-                ) {}
-
-                FloatingActionButton(
-                    onClick = {
-
-                    },
-                    modifier = Modifier
-                        .align(Alignment.BottomEnd)
-                        .size(40.dp),
-                    containerColor = Purple
-                ) {
-                    Icon(
-                        Icons.Default.Edit,
-                        contentDescription = null
-                    )
-                }
-            }
+                onBackClick = onBackClick
+            )
         }
 
-        Spacer(modifier = Modifier.height(24.dp))
-
-        Card(
-            modifier = Modifier.fillMaxWidth()
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color(0xFFF8F2FA))
+                .verticalScroll(rememberScrollState())
+                .padding(20.dp).padding(innerPadding)
         ) {
 
-            Column(
-                modifier = Modifier.padding(16.dp)
+            Spacer(modifier = Modifier.height(20.dp))
+
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.Center
             ) {
 
-                Text("Name")
-                Spacer(modifier = Modifier.height(4.dp))
+                Box {
 
-                OutlinedTextField(
-                    value = name,
-                    onValueChange = { name = it },
-                    modifier = Modifier.fillMaxWidth()
-                )
+                    Surface(
+                        modifier = Modifier.size(140.dp),
+                        shape = CircleShape,
+                        color = Color.White,
+                        shadowElevation = 8.dp
+                    ) {}
 
-                Spacer(modifier = Modifier.height(12.dp))
+                    FloatingActionButton(
+                        onClick = {
 
-                Text("Address")
-                Spacer(modifier = Modifier.height(4.dp))
-
-                OutlinedTextField(
-                    value = address,
-                    onValueChange = { address = it },
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-                Spacer(modifier = Modifier.height(12.dp))
-
-                Text("Phone Number")
-                Spacer(modifier = Modifier.height(4.dp))
-
-                OutlinedTextField(
-                    value = phone,
-                    onValueChange = { phone = it },
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-                Spacer(modifier = Modifier.height(12.dp))
-
-                Text("Website")
-                Spacer(modifier = Modifier.height(4.dp))
-
-                OutlinedTextField(
-                    value = website,
-                    onValueChange = { website = it },
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-                Spacer(modifier = Modifier.height(12.dp))
-
-                Text("About")
-                Spacer(modifier = Modifier.height(4.dp))
-
-                OutlinedTextField(
-                    value = about,
-                    onValueChange = { about = it },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(120.dp)
-                )
-
-                Spacer(modifier = Modifier.height(12.dp))
-
-                Text("Category")
-
-                Spacer(modifier = Modifier.height(4.dp))
-
-                ExposedDropdownMenuBox(
-                    expanded = expanded,
-                    onExpandedChange = {
-                        expanded = !expanded
+                        },
+                        modifier = Modifier
+                            .align(Alignment.BottomEnd)
+                            .size(40.dp),
+                        containerColor = Purple
+                    ) {
+                        Icon(
+                            Icons.Default.Edit,
+                            contentDescription = null
+                        )
                     }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Card(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+
+                Column(
+                    modifier = Modifier.padding(16.dp)
                 ) {
 
+                    Text("Name")
+                    Spacer(modifier = Modifier.height(4.dp))
+
                     OutlinedTextField(
-                        value = selectedCategory,
-                        onValueChange = {},
-                        readOnly = true,
-                        modifier = Modifier
-                            .menuAnchor()
-                            .fillMaxWidth(),
-                        trailingIcon = {
-                            ExposedDropdownMenuDefaults.TrailingIcon(expanded)
-                        }
+                        value = name,
+                        onValueChange = { name = it },
+                        modifier = Modifier.fillMaxWidth()
                     )
 
-                    ExposedDropdownMenu(
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    Text("Address")
+                    Spacer(modifier = Modifier.height(4.dp))
+
+                    OutlinedTextField(
+                        value = address,
+                        onValueChange = { address = it },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    Text("Phone Number")
+                    Spacer(modifier = Modifier.height(4.dp))
+
+                    OutlinedTextField(
+                        value = phone,
+                        onValueChange = { phone = it },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    Text("Website")
+                    Spacer(modifier = Modifier.height(4.dp))
+
+                    OutlinedTextField(
+                        value = website,
+                        onValueChange = { website = it },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    Text("About")
+                    Spacer(modifier = Modifier.height(4.dp))
+
+                    OutlinedTextField(
+                        value = about,
+                        onValueChange = { about = it },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(120.dp)
+                    )
+
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    Text("Category")
+
+                    Spacer(modifier = Modifier.height(4.dp))
+
+                    ExposedDropdownMenuBox(
                         expanded = expanded,
-                        onDismissRequest = {
-                            expanded = false
+                        onExpandedChange = {
+                            expanded = !expanded
                         }
                     ) {
 
-                        categories.forEach { category ->
+                        OutlinedTextField(
+                            value = selectedCategory,
+                            onValueChange = {},
+                            readOnly = true,
+                            modifier = Modifier
+                                .menuAnchor()
+                                .fillMaxWidth(),
+                            trailingIcon = {
+                                ExposedDropdownMenuDefaults.TrailingIcon(expanded)
+                            }
+                        )
 
-                            DropdownMenuItem(
-                                text = {
-                                    Text(category)
-                                },
-                                onClick = {
-                                    selectedCategory = category
-                                    expanded = false
-                                }
-                            )
+                        ExposedDropdownMenu(
+                            expanded = expanded,
+                            onDismissRequest = {
+                                expanded = false
+                            }
+                        ) {
+
+                            categories.forEach { category ->
+
+                                DropdownMenuItem(
+                                    text = {
+                                        Text(category)
+                                    },
+                                    onClick = {
+                                        selectedCategory = category
+                                        expanded = false
+                                    }
+                                )
+                            }
                         }
                     }
                 }
             }
-        }
 
-        Spacer(modifier = Modifier.height(30.dp))
+            Spacer(modifier = Modifier.height(30.dp))
 
-        Button(
-            onClick = {
+            Button(
+                onClick = {
 
-                val uid =
-                    FirebaseAuth.getInstance()
-                        .currentUser?.uid ?: return@Button
+                    val uid =
+                        FirebaseAuth.getInstance()
+                            .currentUser?.uid ?: return@Button
 
-                val vendor = vendor(
+                    val vendor = vendor(
 
-                    userid = uid,
-                    name = name,
-                    address = address,
-                    number = phone.toLongOrNull() ?: 0,
-                    description = about,
-                    email = website,
-                    category = selectedCategory
+                        userid = uid,
+                        name = name,
+                        address = address,
+                        number = phone.toLongOrNull() ?: 0,
+                        description = about,
+                        email = website,
+                        category = selectedCategory
+                    )
+
+                    vendorViewModel.createVendor(
+                        vendor = vendor,
+
+                        onSuccess = {
+
+                            Toast.makeText(
+                                context,
+                                "Vendor Created Successfully",
+                                Toast.LENGTH_SHORT
+                            ).show()
+
+                            onVendorCreated()
+                        },
+                        onFailure = { error ->
+                            Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
+                        }
+                    )
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(55.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Purple
                 )
+            ) {
 
-                vendorViewModel.createVendor(
-                    vendor = vendor,
-
-                    onSuccess = {
-
-                        Toast.makeText(
-                            context,
-                            "Vendor Created Successfully",
-                            Toast.LENGTH_SHORT
-                        ).show()
-
-                        onVendorCreated()
-                    },
-                    onFailure={error ->
-                        Toast.makeText(context,error, Toast.LENGTH_SHORT).show()
-                    }
+                Text(
+                    text = "Start Business",
+                    fontSize = 16.sp,
+                    color = Color.White
                 )
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(55.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Purple
-            )
-        ) {
+            }
 
-            Text(
-                text = "Start Business",
-                fontSize = 16.sp
-            )
+            Spacer(modifier = Modifier.height(20.dp))
         }
-
-        Spacer(modifier = Modifier.height(20.dp))
     }
 }

@@ -2,6 +2,7 @@ package com.example.eventhub.ui.profile
 
 
 import androidx.compose.foundation.Image
+import com.example.eventhub.ui.common.EventHubTopBar
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -12,6 +13,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.*
@@ -32,7 +34,8 @@ fun MyBusinessScreen(
 
     onEditEventClick: (String) -> Unit,
     onCreateEventClick: () -> Unit,
-    eventViewModel: eventviewmodel = viewModel()
+    eventViewModel: eventviewmodel = viewModel(),
+    onBackClick: () -> Unit
 
 ) {
 
@@ -56,62 +59,76 @@ fun MyBusinessScreen(
             )
         }
 
-    Box(
-        modifier = Modifier.fillMaxSize()
-    ) {
+    Scaffold(
 
-        Column(
-            modifier = Modifier.fillMaxSize()
-        ) {
+        topBar = {
 
-            OutlinedTextField(
-                value = searchQuery,
-                onValueChange = {
-                    searchQuery = it
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                leadingIcon = {
-                    Icon(
-                        imageVector =
-                            Icons.Default.Search,
-                        contentDescription = null
-                    )
-                },
-                placeholder = {
-                    Text("Search Events")
-                }
+            EventHubTopBar(
+
+                title = "My Business",
+
+                onBackClick = onBackClick
             )
-
-            LazyColumn {
-
-                items(filteredEvents) { event ->
-
-                    EventCard(
-                        event = event,
-                        onClick = {
-
-                            onEditEventClick(
-                                event.eventId
-                            )
-                        }
-                    )
-                }
-            }
         }
 
-        FloatingActionButton(
-            onClick = {
-                onCreateEventClick()
-            },
-            modifier = Modifier
-                .align(
-                    Alignment.BottomEnd
-                )
-                .padding(20.dp)
+    ) { innerPadding ->
+        Box(
+            modifier = Modifier.fillMaxSize().padding(innerPadding)
         ) {
-            Text("+")
+
+            Column(
+                modifier = Modifier.fillMaxSize()
+            ) {
+
+                OutlinedTextField(
+                    value = searchQuery,
+                    onValueChange = {
+                        searchQuery = it
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    leadingIcon = {
+                        Icon(
+                            imageVector =
+                                Icons.Default.Search,
+                            contentDescription = null
+                        )
+                    },
+                    placeholder = {
+                        Text("Search Events")
+                    }
+                )
+
+                LazyColumn {
+
+                    items(filteredEvents) { event ->
+
+                        EventCard(
+                            event = event,
+                            onClick = {
+
+                                onEditEventClick(
+                                    event.eventId
+                                )
+                            }
+                        )
+                    }
+                }
+            }
+
+            FloatingActionButton(
+                onClick = {
+                    onCreateEventClick()
+                },
+                modifier = Modifier
+                    .align(
+                        Alignment.BottomEnd
+                    )
+                    .padding(20.dp)
+            ) {
+                Text("+")
+            }
         }
     }
 }

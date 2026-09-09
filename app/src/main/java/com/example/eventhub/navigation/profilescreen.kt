@@ -22,6 +22,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.eventhub.ui.theme.Purple
+import com.example.eventhub.ui.theme.Purplemidium
 import com.example.eventhub.viewmodel.vendorviewmodel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -96,7 +98,7 @@ fun ProfileScreen(
             },
             modifier = Modifier.align(Alignment.CenterHorizontally)
         ) {
-            Text("Edit Profile")
+            Text("Edit Profile", color = Color.White)
         }
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -183,6 +185,7 @@ fun ProfileMenuItem(
 
             Icon(
                 imageVector = icon,
+                tint = Purple,
                 contentDescription = null
             )
 
@@ -195,7 +198,9 @@ fun ProfileMenuItem(
 
             Icon(
                 imageVector = Icons.Default.ArrowForward,
-                contentDescription = null
+                contentDescription = null,
+                tint = Purple
+
             )
         }
     }
