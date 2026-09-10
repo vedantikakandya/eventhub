@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -34,6 +35,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.eventhub.R
 import com.example.eventhub.data.model.event
+import com.example.eventhub.ui.theme.Purple
 import com.example.eventhub.viewmodel.eventviewmodel
 import com.google.firebase.Timestamp
 
@@ -215,11 +217,13 @@ fun eventdetails(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(48.dp),
-
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Purple
+                    ),
                     shape = RoundedCornerShape(12.dp)
                 ) {
 
-                    Text("Contact Organiser",color = Color.White)
+                    Text("Contact Vendor",color = Color.White)
                 }
             }
         }

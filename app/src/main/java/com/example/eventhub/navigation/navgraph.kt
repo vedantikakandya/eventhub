@@ -18,7 +18,6 @@ import com.example.eventhub.ui.profile.MyBusinessScreen
 import com.example.eventhub.ui.profile.MyEventsScreen
 import com.example.eventhub.ui.splash.splashscreen
 import com.example.eventhub.ui.vendor.vendorprofile
-
 @Composable
 fun appnav(navController: NavHostController){
     NavHost(
@@ -85,7 +84,13 @@ fun appnav(navController: NavHostController){
 
         composable(screen.vendordetails.route) { backStackEntry ->
             val vendorId = backStackEntry.arguments?.getString("vendorId")
-            vendorprofile(vendorId = vendorId ?: "")
+
+            vendorprofile(
+                vendorId = vendorId ?: "",
+                onChatClick = { chatId ->
+                    navController.navigate(screen.chat.createRoute(chatId))
+                }
+            )
         }
         composable(screen.explore.route) {
             ExploreScreen(
