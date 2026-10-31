@@ -11,7 +11,7 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.eventhub"
+        applicationId = "com.vedantika.eventhub"
         minSdk = 24
         targetSdk = 35
         versionCode = 1
